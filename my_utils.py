@@ -1,4 +1,4 @@
-def get_column(file_name, query_column, query_value, result_column):
+def get_column(file_name, query_column, query_value, result_column=1):
     # open file
     file = open(file_name, 'r')
     # declares array where resuling values will be stored
