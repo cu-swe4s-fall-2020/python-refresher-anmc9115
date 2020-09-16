@@ -20,6 +20,3 @@ def get_column(file_name, query_column, query_value, result_column=1):
     file.close()
     
     return results
- 
-    
-print(get_column('covid-19-data/us-counties.csv',1,'Boulder',4))
