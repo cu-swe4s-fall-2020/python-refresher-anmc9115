@@ -39,7 +39,12 @@ def get_column(file_name, query_column, query_value, results_column):
             
         # adding result col to list that matches query
         if query_value == columns[query_column]:
-            results.append(int(columns[results_column]))
+            # catch type errors
+            try:
+                results.append(int(columns[results_column]))
+            except:
+                print('Column values could not be converted to type int')
+                sys.exit(5)
     
     file.close()
     
