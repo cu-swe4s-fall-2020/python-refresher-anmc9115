@@ -1,6 +1,5 @@
 import my_utils as mu
 import argparse
-import sys
 
 def print_cases(file_name, county_column, county, cases_column):
     cases = mu.get_column(file_name, county_column, county, cases_column)
