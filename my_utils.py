@@ -1,7 +1,30 @@
+"""Utilties for reading files
+
+    * get_column - parses a CSV and returns a column
+"""
 from array import array
 import sys
 
 def get_column(file_name, query_column, query_value, results_column):
+    """Opens a csv and returns a column as an array of integers.
+    
+    Parameters
+    ----------
+    file_name: string 
+            The path to the CSV file
+    query_column: integer
+            The column containing the query string
+    query_value: string
+            For each occurance of this string, values from the 
+            results column of the same row will be collected
+    results_column: integer
+            The column containing values to be collected
+            
+    Returns:
+    --------
+    results_array: array of integers
+           values collected from results_column based on query inputs
+    """
     # open file, catch errors
     try:
         file = open(file_name, 'r')
