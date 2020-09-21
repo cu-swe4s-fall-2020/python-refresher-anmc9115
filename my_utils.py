@@ -1,4 +1,4 @@
-def get_column(file_name, query_column, query_value, result_column=1):
+def get_column(file_name, query_column, query_value, results_column):
     # open file
     file = open(file_name, 'r')
     
@@ -14,7 +14,7 @@ def get_column(file_name, query_column, query_value, result_column=1):
         # adding each value from the result column which
         # has a value in query col that matches the query value
         if query_value == columns[query_column]:
-            results.append(columns[result_column])
+            results.append(columns[results_column])
     
     # close file
     file.close()
