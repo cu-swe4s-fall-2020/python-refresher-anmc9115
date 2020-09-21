@@ -1,7 +1,29 @@
+"""Parses file and prints cases
+
+    * print_cases - Prints int array of covid cases for a particular county
+"""
 import my_utils as mu
 import argparse
 
 def print_cases(file_name, county_column, county, cases_column):
+    """Calls get_column() function to return cases for a county.
+    
+    Parameters
+    ----------
+    file_name: string 
+            The path to the CSV file
+    county_column: integer
+            The column containing the county strings
+    county: string
+            The name of the county
+    cases_column: integer
+            The column containing the case data
+            
+    Returns:
+    --------
+    cases: array of integers
+            An array containing all cases for the input county
+    """
     cases = mu.get_column(file_name, county_column, county, cases_column)
     return cases
 
