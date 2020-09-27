@@ -23,7 +23,7 @@ def get_column(file_name, query_column, query_value, results_column):
 
     Returns:
     --------
-    results_array: array of integers
+    results_array: integers array
            values collected from results_column based on query inputs
     """
     # open file, catch errors
@@ -95,7 +95,7 @@ def get_daily_count(file_name, query_column, query_value, results_column):
 
     Returns:
     --------
-    daily_count: int array
+    daily_count: int list
             values of specified column adjusted to daily
             rather than cumulative values
     """
@@ -118,28 +118,20 @@ def running_average(daily_count, window_size=5):
 
     Parameters
     ----------
-    daily_cases: int array
+    daily_count: int array
             Daily cases or deaths
     window_size: int
             Size of the window (range)
 
     Returns:
     --------
-    running_averages: float array
-            Array containing the running average
+    running_averages: float list
+            List containing the running averages
             for the given window size
     """
-    # open file, catch errors
-    try:
-        file = open(file_name, 'r')
-    except FileNotFoundError:
-        print("Could not find file: " + file_name)
-        sys.exit(1)
-    except PermissionError:
-        print("Could not access file: " + file_name)
-        sys.exit(2)
-
-    # skip first line
-    next(file)
-
-    return daily_numbers
+    running_avgs = []
+    for i in range(len(daily_count) - window_size + 1):
+        current_window = daily_count[i:i+window_size]
+        current_avg = sum(current_window)/window_size
+        running_avgs.append(current_avg)
+    return running_avgs
