@@ -78,14 +78,14 @@ def main():
                                args.county,
                                args.cases_column)
 
-    print(county_cases)
+    print(*county_cases, sep='\n')
 
     daily_count = mu.get_daily_count(args.file_name,
                                      args.county_column,
                                      args.county,
                                      args.cases_column)
     if args.print_daily_cases:
-        print(daily_count)
+        print(*daily_count, sep='\n')
 
     if args.print_running_avg:
         try:
@@ -94,7 +94,7 @@ def main():
         except TypeError:
             running_avg = mu.running_average(daily_count)
         
-        print(running_avg)
+        print(*running_avg, sep='\n')
 
 
 if __name__ == '__main__':
