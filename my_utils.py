@@ -1,6 +1,8 @@
 """Utilties for reading files
 
     * get_column - parses a CSV and returns a column
+    * get_daily_count - takes a column, returns change each index
+    * running_average - returns running avgs over a window throughout list
 """
 from array import array
 import sys
@@ -130,8 +132,19 @@ def running_average(daily_count, window_size=5):
             for the given window size
     """
     running_avgs = []
-    for i in range(len(daily_count) - window_size + 1):
-        current_window = daily_count[i:i+window_size]
-        current_avg = sum(current_window)/window_size
+
+    if window_size > len(daily_count):
+        print(
+                "You entered window size "
+                + str(window_size)
+                + " but there only "
+                + str(len(daily_count)) + " list items")
+        sys.exit(6)
+
+    for i in range(len(daily_count)-window_size+1):
+        current_window = daily_count[i:i + window_size]
+        current_avg = sum(current_window) / window_size
         running_avgs.append(current_avg)
-    return running_avgs
+
+    running_avg_array = array('f', running_avgs)
+    return running_avg_array
