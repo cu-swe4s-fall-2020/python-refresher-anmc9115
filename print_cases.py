@@ -1,6 +1,7 @@
 """Parses file and prints cases
 
     * print_cases - Prints int array of covid cases for a particular county
+    * option to print daily cases and running average
 """
 import my_utils as mu
 import argparse
@@ -54,6 +55,21 @@ def main():
                         type=int,
                         required=True,
                         help='Enter the cases column to be returned')
+    parser.add_argument('--print_daily_cases',
+                        dest='print_daily_cases',
+                        type=bool,
+                        required=False,
+                        help='Enter 1 to print daily cases')
+    parser.add_argument('--print_running_avg',
+                        dest='print_running_avg',
+                        type=bool,
+                        required=False,
+                        help='Enter 1 to print running avg')
+    parser.add_argument('--window_size',
+                        dest='window_size',
+                        type=int,
+                        required=False,
+                        help='Enter window size for avg calculation')
 
     args = parser.parse_args()
 
@@ -63,6 +79,22 @@ def main():
                                args.cases_column)
 
     print(county_cases)
+
+    daily_count = mu.get_daily_count(args.file_name,
+                                     args.county_column,
+                                     args.county,
+                                     args.cases_column)
+    if args.print_daily_cases:
+        print(daily_count)
+
+    if args.print_running_avg:
+        try:
+            running_avg = mu.running_average(daily_count,
+                                             args.window_size)
+        except TypeError:
+            running_avg = mu.running_average(daily_count)
+        
+        print(running_avg)
 
 
 if __name__ == '__main__':
