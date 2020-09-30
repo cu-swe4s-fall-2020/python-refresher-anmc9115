@@ -80,7 +80,7 @@ def get_column(file_name, query_column, query_value, results_column):
     return results_array
 
 
-def get_daily_count(file_name, query_column, query_value, results_column):
+def get_daily_count(results):
     """Opens a csv and
 
     Parameters
@@ -102,8 +102,6 @@ def get_daily_count(file_name, query_column, query_value, results_column):
             rather than cumulative values
     """
 
-    # Runs get_column to recieve array value
-    results = get_column(file_name, query_column, query_value, results_column)
     daily_count = array('i')
 
     # Fills array with daily count
@@ -132,19 +130,16 @@ def running_average(daily_count, window_size=5):
             for the given window size
     """
     running_avgs = []
-
+    
+    # if window_size too big, adjusted to size of data
     if window_size > len(daily_count):
-        print(
-                "You entered window size "
-                + str(window_size)
-                + " but there only "
-                + str(len(daily_count)) + " list items")
-        sys.exit(6)
+        window_size = len(daily_count)
 
     for i in range(len(daily_count)-window_size+1):
         current_window = daily_count[i:i + window_size]
         current_avg = sum(current_window) / window_size
         running_avgs.append(current_avg)
-
+    
     running_avg_array = array('f', running_avgs)
-    return running_avg_array
+    
+    return (running_avg_array, window_size)
