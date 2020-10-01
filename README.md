@@ -40,3 +40,5 @@ git clone https://github.com/cu-swe4s-fall-2020/python-refresher-anmc9115.git
     * ADD: `test_my_utils.py` unit tests for my_utils
     * ADD: `test_print_cases.sh` functional test for print_cases
     * CHANGE: update formatting in my_utils and print_cases
+* v3.1
+   * CHANGE: added missing for loop in random data generation for `test_my_utils.py`
