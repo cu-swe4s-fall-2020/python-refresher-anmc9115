@@ -1,4 +1,4 @@
-"""Unit testing for my_utils
+"""Unit testing for functions in my_utils
 """
 import my_utils
 import unittest
@@ -17,17 +17,46 @@ class TestGetColumn(unittest.TestCase):
         wrong_test_column = array('i',[7,7,7,8,8,11,24,30,37,39,49,51,66,76,84,90,100,107,114,132])
         self.assertNotEqual(column, wrong_test_column)
 
-# QUESTION: HOW TO ERROR CHECK WITH SYS.EXIT
-#     def test_file_not_found(self): 
-#         with self.assertRaises(FileNotFoundError) as ex:
-#             my_utils.get_column('file_DNE.csv',1,'Boulder',4)
-#             self.assertEqual('Could not find file: file_DNE.csv')          
-#     def test_query_col_doesnt_exist(self):
-#         self.assertRaises(SystemExit, my_utils.get_column, 'test_counties.csv',1,'Boulder',12)    
-#     def test_result_col_doesnt_exist(self):
-#         #test
-#     def test_column_not_int(self):
-#         #test
+    def test_file_not_found(self): 
+        with self.assertRaises(SystemExit) as cm:
+            my_utils.get_column('no-data-file.csv',1,'Boulder',4) # Q: HOW TO SUPRESS OUTPUT?
+        self.assertEqual(cm.exception.code, 1)
+        for i in range(100):
+            if i != 1:
+                self.assertNotEqual(cm.exception.code, i)
+    
+    # Q: IS THIS ONE NECESSARY? (CANNOT UPLOAD PRIVATE FILE TO GITHUB)
+    def test_no_permission(self): 
+        with self.assertRaises(SystemExit) as cm:
+            my_utils.get_column('private_test_counties.csv',1,'Boulder',4) # Q: HOW TO SUPRESS OUTPUT?
+        self.assertEqual(cm.exception.code, 2)
+        for i in range(100):
+            if i != 2:
+                self.assertNotEqual(cm.exception.code, i)
+                
+    def test_query_col_doesnt_exist(self):
+        with self.assertRaises(SystemExit) as cm:
+            my_utils.get_column('covid-19-data/us-counties.csv',12,'Boulder',4) # Q: HOW TO SUPRESS OUTPUT?
+        self.assertEqual(cm.exception.code, 3)
+        for i in range(100):
+            if i != 3:
+                self.assertNotEqual(cm.exception.code, i)
+        
+    def test_result_col_doesnt_exist(self):
+        with self.assertRaises(SystemExit) as cm:
+            my_utils.get_column('covid-19-data/us-counties.csv',1,'Boulder',12) # Q: HOW TO SUPRESS OUTPUT?
+        self.assertEqual(cm.exception.code, 4)
+        for i in range(100):
+            if i != 4:
+                self.assertNotEqual(cm.exception.code, i)
+        
+    def test_column_not_int(self):
+        with self.assertRaises(SystemExit) as cm:
+            my_utils.get_column('covid-19-data/us-counties.csv',1,'Boulder',2) # Q: HOW TO SUPRESS OUTPUT?
+        self.assertEqual(cm.exception.code, 5)
+        for i in range(100):
+            if i != 5:
+                self.assertNotEqual(cm.exception.code, i)
 
 
 class TestDailyCount(unittest.TestCase):  
@@ -95,7 +124,10 @@ class TestRunningAvg(unittest.TestCase):
                 self.assertEqual(avgs[j], np.mean(data[j:j+data_size]))
                 self.assertEqual(window_size, data_size)
 
+    def test_array_not_numerical(self):
+        some_strings = ['a','b','c','d','e']
+        window = random.randint(1,5)
+        self.assertRaises(TypeError, my_utils.running_average, some_strings, window)
 
-# MAIN -------------------------------------------------------------------- 
 if __name__ == '__main__': 
     unittest.main()
