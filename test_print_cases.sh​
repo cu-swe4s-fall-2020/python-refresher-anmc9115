@@ -1,5 +1,0 @@
-test -e ssshtest || wget -qhttps://raw.githubusercontent.com/ryanlayer/ssshtest/master/ssshtest . ssshtest
-
-run python print_cases.py test_counties.csv 1 Boulder 4
-assert_in_std_out < 1 7 7 8 8 11 24 30 37 39 49 51 66 76 84 90 100 107 114 132 >
-assert_exit_code 0
