@@ -73,28 +73,27 @@ def main():
 
     args = parser.parse_args()
 
+    # Prints raw cumulative cases in a county
     county_cases = print_cases(args.file_name,
                                args.county_column,
                                args.county,
                                args.cases_column)
-
     print(*county_cases, sep='\n')
 
-    daily_count = mu.get_daily_count(args.file_name,
-                                     args.county_column,
-                                     args.county,
-                                     args.cases_column)
+    # Prints daily cases in a county
+    daily_count = mu.get_daily_count(county_cases)
     if args.print_daily_cases:
         print(*daily_count, sep='\n')
 
+    # Prints running avg for a county
     if args.print_running_avg:
         try:
-            running_avg = mu.running_average(daily_count,
-                                             args.window_size)
+            running_avg, window = mu.running_average(daily_count,
+                                                     args.window_size)
         except TypeError:
-            running_avg = mu.running_average(daily_count)
-        
+            running_avg, window = mu.running_average(daily_count)
         print(*running_avg, sep='\n')
+        print(window)
 
 
 if __name__ == '__main__':
