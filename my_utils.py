@@ -53,6 +53,7 @@ def get_column(file_name, query_column, query_value, results_column):
                   + " but there are only "
                   + str(len(columns))
                   + " columns")
+            file.close()
             sys.exit(3)
         # checking that results col value exists
         if results_column > len(columns):
@@ -61,6 +62,7 @@ def get_column(file_name, query_column, query_value, results_column):
                   + " but there only "
                   + str(len(columns))
                   + " columns")
+            file.close()
             sys.exit(4)
 
         # adding result col to list that matches query
@@ -70,6 +72,7 @@ def get_column(file_name, query_column, query_value, results_column):
                 results.append(int(columns[results_column]))
             except ValueError:
                 print('Column values could not be converted to type int')
+                file.close()
                 sys.exit(5)
 
     file.close()
@@ -108,7 +111,7 @@ def get_daily_count(results):
 
 def running_average(daily_count, window_size=5):
     """Computes a running average given an array and window.
-    
+
     Parameters
     ----------
     daily_count: int array
@@ -127,6 +130,9 @@ def running_average(daily_count, window_size=5):
     # if window_size too big, adjusted to size of data
     if window_size > len(daily_count):
         window_size = len(daily_count)
+    # if window_size negative, restore to default
+    if window_size < 0:
+        window_size = 5
 
     for i in range(len(daily_count)-window_size+1):
         current_window = daily_count[i:i + window_size]
