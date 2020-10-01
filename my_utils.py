@@ -81,23 +81,16 @@ def get_column(file_name, query_column, query_value, results_column):
 
 
 def get_daily_count(results):
-    """Opens a csv and
+    """Takes an array of cumulative values and computes daily values
 
     Parameters
     ----------
-    file_name: string
-            The path to the CSV file
-    query_column: integer
-            The column containing the query string
-    query_value: string
-            For each occurance of this string, values from the
-            results column of the same row will be collected
-    results_column: integer
-            The column containing values to be collected
+    results: int array
+            an array of cumulative values
 
     Returns:
     --------
-    daily_count: int list
+    daily_count: int array
             values of specified column adjusted to daily
             rather than cumulative values
     """
@@ -114,8 +107,8 @@ def get_daily_count(results):
 
 
 def running_average(daily_count, window_size=5):
-    """Opens a csv and
-
+    """Computes a running average given an array and window.
+    
     Parameters
     ----------
     daily_count: int array
@@ -130,7 +123,7 @@ def running_average(daily_count, window_size=5):
             for the given window size
     """
     running_avgs = []
-    
+
     # if window_size too big, adjusted to size of data
     if window_size > len(daily_count):
         window_size = len(daily_count)
@@ -139,7 +132,5 @@ def running_average(daily_count, window_size=5):
         current_window = daily_count[i:i + window_size]
         current_avg = sum(current_window) / window_size
         running_avgs.append(current_avg)
-    
-    running_avg_array = array('f', running_avgs)
-    
-    return (running_avg_array, window_size)
+
+    return (running_avgs, window_size)
