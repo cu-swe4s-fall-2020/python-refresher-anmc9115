@@ -1,5 +1,5 @@
 # COVID-19 Cases per County
-> This project will return an integer array of coronavirus cases recorded in a particular county
+> This project will print cumulative, daily, and a running average of cases recorded in a county
 
 The file print_cases takes command line arguments for a csv file containing COVID data 
 recieved from https://github.com/nytimes/covid-19-data.git, as well as the county column, 
