@@ -22,44 +22,26 @@ class TestGetColumn(unittest.TestCase):
 
     def test_file_not_found(self):
         with self.assertRaises(SystemExit) as cm:
-            my_utils.get_column('no-data-file.csv', 1, 'Boulder', 4)  # Q: HOW TO SUPRESS OUTPUT?
+            my_utils.get_column('no-data-file.csv', 1, 'Boulder', 4)
         self.assertEqual(cm.exception.code, 1)
-        for i in range(100):
-            if i != 1:
-                self.assertNotEqual(cm.exception.code, i)
-
-    # Q: IS THIS ONE NECESSARY? (CANNOT UPLOAD PRIVATE FILE TO GITHUB)
-    def test_no_permission(self):
-        with self.assertRaises(SystemExit) as cm:
-            my_utils.get_column('private_test_counties.csv', 1, 'Boulder', 4)  # Q: HOW TO SUPRESS OUTPUT?
-        self.assertEqual(cm.exception.code, 2)
-        for i in range(100):
-            if i != 2:
-                self.assertNotEqual(cm.exception.code, i)
 
     def test_query_col_doesnt_exist(self):
         with self.assertRaises(SystemExit) as cm:
-            my_utils.get_column('covid-19-data/us-counties.csv', 12, 'Boulder', 4)  # Q: HOW TO SUPRESS OUTPUT?
+            my_utils.get_column('covid-19-data/us-counties.csv', 12,
+                                'Boulder', 4)
         self.assertEqual(cm.exception.code, 3)
-        for i in range(100):
-            if i != 3:
-                self.assertNotEqual(cm.exception.code, i)
 
     def test_result_col_doesnt_exist(self):
         with self.assertRaises(SystemExit) as cm:
-            my_utils.get_column('covid-19-data/us-counties.csv', 1, 'Boulder', 12)  # Q: HOW TO SUPRESS OUTPUT?
+            my_utils.get_column('covid-19-data/us-counties.csv', 1,
+                                'Boulder', 12)
         self.assertEqual(cm.exception.code, 4)
-        for i in range(100):
-            if i != 4:
-                self.assertNotEqual(cm.exception.code, i)
 
     def test_column_not_int(self):
         with self.assertRaises(SystemExit) as cm:
-            my_utils.get_column('covid-19-data/us-counties.csv', 1, 'Boulder', 2)  # Q: HOW TO SUPRESS OUTPUT?
+            my_utils.get_column('covid-19-data/us-counties.csv', 1,
+                                'Boulder', 2)
         self.assertEqual(cm.exception.code, 5)
-        for i in range(100):
-            if i != 5:
-                self.assertNotEqual(cm.exception.code, i)
 
 
 class TestDailyCount(unittest.TestCase):
