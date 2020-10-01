@@ -1,3 +1,5 @@
+"""Unit testing for my_utils
+"""
 import my_utils
 import unittest
 import random
@@ -5,9 +7,8 @@ import statistics
 import numpy as np
 from array import array
 
-    
-# TEST GET COLUMN ---------------------------------------------------------
-class TestMyUtils(unittest.TestCase):  
+
+class TestGetColumn(unittest.TestCase):  
     
     def test_get_column(self):
         column = my_utils.get_column('test_counties.csv',1,'Boulder',4)
@@ -29,7 +30,7 @@ class TestMyUtils(unittest.TestCase):
 #         #test
 
 
-# TEST DAILY COUNT --------------------------------------------------------
+class TestDailyCount(unittest.TestCase):  
     def test_daily_count(self):
         # simple test
         column = my_utils.get_column('test_counties.csv',1,'Boulder',4)
@@ -56,7 +57,7 @@ class TestMyUtils(unittest.TestCase):
         self.assertRaises(TypeError, my_utils.get_daily_count, some_strings)
 
 
-# TEST RUNNING AVERAGE ----------------------------------------------------
+class TestRunningAvg(unittest.TestCase):  
     def test_running_avg(self):
         # simple test
         avgs, window = my_utils.running_average([4,6,3,1,8,99], window_size=4)
