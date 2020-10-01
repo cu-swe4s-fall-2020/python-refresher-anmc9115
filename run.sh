@@ -1,8 +1,10 @@
-# this one works
-python print_cases.py --file covid-19-data/us-counties.csv --county_column 1 --county 'Boulder' --cases_column 4
+# runs pycodestyle on files
+pycodestyle my_utils.py
+pycodestyle print_cases.py
+pycodestyle test_my_utils.py
 
-# this one gives a file not found error
-python print_cases.py --file covid-data/us-counties.csv --county_column 1 --county 'Boulder' --cases_column 4
+# runs functional test
+bash test_print_cases.sh
 
-# this one gives a nonexistant column error 
-python print_cases.py --file covid-19-data/us-counties.csv --county_column 1 --county 'Boulder' --cases_column 12
+#runs unit tests
+python test_my_utils.py -b
