@@ -61,7 +61,8 @@ class TestDailyCount(unittest.TestCase):
         for i in range(1000):
             data_size = random.randint(100, 1000)
             data = array('i')
-            data.append(random.randint(1, 100))
+            for j in range(data_size):
+                data.append(random.randint(1, 100))
             daily = my_utils.get_daily_count(data)
             for k in range(len(daily)):
                 if k == 0:
