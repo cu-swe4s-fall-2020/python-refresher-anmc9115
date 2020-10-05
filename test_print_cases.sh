@@ -30,11 +30,6 @@ run test_file_not_found python print_cases.py --file fileDNE.csv --county_column
 assert_exit_code 1
 assert_in_stdout 'Could not find file: fileDNE.csv'
 
-# Test permission error
-run test_file_not_accessible python print_cases.py --file private_test_counties.csv --county_column 1 --county 'Boulder' --cases_column 4
-assert_exit_code 2
-assert_in_stdout 'Could not access file: private_test_counties.csv'
-
 # Test query column DNE
 run test_query_doesnt_exist python print_cases.py --file test_counties.csv --county_column 12 --county 'Boulder' --cases_column 4
 assert_exit_code 3
@@ -237,3 +232,32 @@ assert_in_stdout '1
 7.6
 9.6
 5'
+
+# Test missing file dates
+run test_negative_window python print_cases.py --file skipped_days.csv --county_column 1 --county 'Boulder' --cases_column 4
+assert_exit_code 0
+assert_in_stdout '1
+7
+7
+8
+8
+11
+24
+30
+37
+39
+49
+51
+66
+76
+84
+90
+100
+107
+114
+132'
+
+# Test value error raised by out of order dates
+run test_negative_window python print_cases.py --file out_of_order.csv --county_column 1 --county 'Boulder' --cases_column 4
+assert_exit_code 6
+assert_in_stdout 'File contains dates that are not sequential'
