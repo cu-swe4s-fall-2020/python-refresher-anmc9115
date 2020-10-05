@@ -5,6 +5,7 @@
 """
 import my_utils as mu
 import argparse
+import sys
 
 
 def print_cases(file_name, county_column, county, cases_column):
@@ -74,10 +75,15 @@ def main():
     args = parser.parse_args()
 
     # Prints raw cumulative cases in a county
-    county_cases = print_cases(args.file_name,
-                               args.county_column,
-                               args.county,
-                               args.cases_column)
+    try:
+        county_cases = print_cases(args.file_name,
+                                   args.county_column,
+                                   args.county,
+                                   args.cases_column)
+    except ValueError:
+        print('File contains dates that are not sequential')
+        sys.exit(6)
+
     print(*county_cases, sep='\n')
 
     # Prints daily cases in a county

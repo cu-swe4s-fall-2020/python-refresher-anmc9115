@@ -27,21 +27,31 @@ class TestGetColumn(unittest.TestCase):
 
     def test_query_col_doesnt_exist(self):
         with self.assertRaises(SystemExit) as cm:
-            my_utils.get_column('covid-19-data/us-counties.csv', 12,
+            my_utils.get_column('test_counties.csv', 12,
                                 'Boulder', 4)
         self.assertEqual(cm.exception.code, 3)
 
     def test_result_col_doesnt_exist(self):
         with self.assertRaises(SystemExit) as cm:
-            my_utils.get_column('covid-19-data/us-counties.csv', 1,
+            my_utils.get_column('test_counties.csv', 1,
                                 'Boulder', 12)
         self.assertEqual(cm.exception.code, 4)
 
     def test_column_not_int(self):
         with self.assertRaises(SystemExit) as cm:
-            my_utils.get_column('covid-19-data/us-counties.csv', 1,
+            my_utils.get_column('test_counties.csv', 1,
                                 'Boulder', 2)
         self.assertEqual(cm.exception.code, 5)
+
+    def test_skipped_days_in_file(self):
+        column = my_utils.get_column('skipped_days.csv', 1, 'Boulder', 4)
+        test_column = array('i', [1, 7, 7, 8, 8, 11, 24, 30, 37, 39, 49,
+                                  51, 66, 76, 84, 90, 100, 107, 114, 132])
+        self.assertEqual(column, test_column)
+
+    def test_dates_out_of_order(self):
+        with self.assertRaises(ValueError):
+            my_utils.get_column('out_of_order.csv', 1, 'Boulder', 4)
 
 
 class TestDailyCount(unittest.TestCase):
