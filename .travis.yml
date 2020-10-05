@@ -9,6 +9,7 @@ before_install:
     - conda activate test
     - conda install --yes python=3.6
     - conda install -y pycodestyle
+    - conda install --yes numpy=1.8
 script:
     - python test_my_utils.py
     - bash test_print_cases.sh
