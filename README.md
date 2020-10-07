@@ -6,7 +6,8 @@ recieved from https://github.com/nytimes/covid-19-data.git, as well as the count
 county of interest, and the cases column. The print_cases function calls upon get_column 
 in my_utils.py in order to collect and store cases per the specified county in an integer 
 array, which is returned. There are options to print the daily cases, rather than cumulative
-cases, as well as the running average over a given window. 
+cases, as well as the running average over a given window. Files which contain skipped days 
+will be filled in, and those which contain out-of order dates will raise an error. 
 
 ## Installation
 
@@ -42,3 +43,8 @@ git clone https://github.com/cu-swe4s-fall-2020/python-refresher-anmc9115.git
     * CHANGE: update formatting in my_utils and print_cases
 * v3.1
    * CHANGE: added missing for loop in random data generation for `test_my_utils.py`
+* v4.0
+   * ADD: skipped days are filled in in `get_column()` of `my_utils.py`
+   * ADD: out of order days raise a ValueError in `get_column()` of `my_utils.py`
+   * CHANGE: functional and unit tests updated
+   * CHANGE: continuous integration implemented using `.travis.yml`
