@@ -5,12 +5,11 @@ before_install:
     - . /home/travis/miniconda3/etc/profile.d/conda.sh
     - conda update --yes conda
     - conda config --add channels r
-    - conda config --add channels anaconda
     - conda create --yes -n test
     - conda activate test
     - conda install --yes python=3.6
     - conda install -y pycodestyle
-    - conda install --yes numpy=1.8
+    - conda install --yes numpy=1.19
 script:
     - python test_my_utils.py
     - bash test_print_cases.sh
