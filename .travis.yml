@@ -5,6 +5,7 @@ before_install:
     - . /home/travis/miniconda3/etc/profile.d/conda.sh
     - conda update --yes conda
     - conda config --add channels r
+    - conda config --add channels anaconda
     - conda create --yes -n test
     - conda activate test
     - conda install --yes python=3.6
