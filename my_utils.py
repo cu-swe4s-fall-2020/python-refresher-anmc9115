@@ -1,6 +1,6 @@
 """Utilties for reading files
 
-    * get_column - parses a CSV and returns a column
+    * get_columns - parses a CSV and returns a column
     * get_daily_count - takes a column, returns change each index
     * running_average - returns running avgs over a window throughout list
 """
@@ -9,7 +9,7 @@ import sys
 from datetime import datetime
 
 
-def get_column(file_name, query_column, query_value, results_column):
+def get_columns(file_name, query_column, query_value, results_columns):
     """Opens a csv and returns a column as an array of integers.
 
     Parameters
@@ -21,13 +21,13 @@ def get_column(file_name, query_column, query_value, results_column):
     query_value: string
             For each occurance of this string, values from the
             results column of the same row will be collected
-    results_column: integer
-            The column containing values to be collected
+    results_columns: list of ints
+            The columns containing values to be collected
 
     Returns:
     --------
     results_array: integers array
-           values collected from results_column based on query inputs
+           values collected from results_columns based on query inputs
     """
     # open file, catch errors
     try:
@@ -60,14 +60,15 @@ def get_column(file_name, query_column, query_value, results_column):
             file.close()
             sys.exit(3)
         # checking that results col value exists
-        if results_column > len(columns):
-            print("You entered results column "
-                  + str(results_column)
-                  + " but there only "
-                  + str(len(columns))
-                  + " columns")
-            file.close()
-            sys.exit(4)
+        for i in range(len(results_columns)):
+            if results_columns[i] > len(columns):
+                print("You entered results column "
+                      + str(results_columns)
+                      + " but there only "
+                      + str(len(columns))
+                      + " columns")
+                file.close()
+                sys.exit(4)
 
         # filling cases between skipped dates
         if last_date is not None:
@@ -80,22 +81,16 @@ def get_column(file_name, query_column, query_value, results_column):
 
         # adding result col to list that matches query
         if query_value == columns[query_column]:
-            # catch type errors
-            try:
-                results.append(int(columns[results_column]))
-            except ValueError:
-                print('Column values could not be converted to type int')
-                file.close()
-                sys.exit(5)
-
+            if columns[query_column] == query_value:
+                result = []
+                for result_column in results_columns:
+                    result.append(columns[result_column])
+                results.append(result)
         last_date = curr_date
 
     file.close()
 
-    # convert to array
-    results_array = array('i', results)
-
-    return results_array
+    return results
 
 
 def get_daily_count(results):
@@ -103,8 +98,8 @@ def get_daily_count(results):
 
     Parameters
     ----------
-    results: int array
-            an array of cumulative values
+    results: int list
+            a list of cumulative values
 
     Returns:
     --------
@@ -113,14 +108,21 @@ def get_daily_count(results):
             rather than cumulative values
     """
 
-    daily_count = array('i')
+    flat_results = []
+
+    # converts list of lists to flat int list
+    for sublist in results:
+        for item in sublist:
+            flat_results.append(int(item))
+
+    daily_count = []
 
     # Fills array with daily count
-    for i in range(len(results)):
+    for i in range(len(flat_results)):
         if i == 0:
-            daily_count.append(results[i])
+            daily_count.append(flat_results[i])
         else:
-            daily_count.append(results[i] - results[i-1])
+            daily_count.append(flat_results[i] - flat_results[i-1])
     return daily_count
 
 
