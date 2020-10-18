@@ -4,26 +4,26 @@ test -e ssshtest || wget -q https://raw.githubusercontent.com/ryanlayer/ssshtest
 # Test correct input
 run test_print_cases python print_cases.py --file test_counties.csv --county_column 1 --county 'Boulder' --cases_column 4
 assert_exit_code 0
-assert_in_stdout '1
-7
-7
-8
-8
-11
-24
-30
-37
-39
-49
-51
-66
-76
-84
-90
-100
-107
-114
-132'
+assert_in_stdout "['1']
+['7']
+['7']
+['8']
+['8']
+['11']
+['24']
+['30']
+['37']
+['39']
+['49']
+['51']
+['66']
+['76']
+['84']
+['90']
+['100']
+['107']
+['114']
+['132']"
 
 # Test file not found
 run test_file_not_found python print_cases.py --file fileDNE.csv --county_column 1 --county 'Boulder' --cases_column 4
@@ -38,36 +38,31 @@ assert_in_stdout 'You entered query column 12 but there are only 7 columns'
 # Test result column DNE
 run test_result_doesnt_exist python print_cases.py --file test_counties.csv --county_column 1 --county 'Boulder' --cases_column 12
 assert_exit_code 4
-assert_in_stdout 'You entered results column 12 but there only 7 columns'
-
-# Test result column not numerical
-run test_result_not_numeric python print_cases.py --file test_counties.csv --county_column 1 --county 'Boulder' --cases_column 2
-assert_exit_code 5
-assert_in_stdout 'Column values could not be converted to type int'
+assert_in_stdout 'You entered results column [12] but there only 7 columns'
 
 # Test print daily cases
 run test_print_daily python print_cases.py --file test_counties.csv --county_column 1 --county 'Boulder' --cases_column 4 --print_daily_cases 1
 assert_exit_code 0
-assert_in_stdout '1
-7
-7
-8
-8
-11
-24
-30
-37
-39
-49
-51
-66
-76
-84
-90
-100
-107
-114
-132
+assert_in_stdout "['1']
+['7']
+['7']
+['8']
+['8']
+['11']
+['24']
+['30']
+['37']
+['39']
+['49']
+['51']
+['66']
+['76']
+['84']
+['90']
+['100']
+['107']
+['114']
+['132']
 1
 6
 0
@@ -87,31 +82,31 @@ assert_in_stdout '1
 10
 7
 7
-18'
+18"
 
 # Test print running avg w/o specified window size
 run test_print_running_avg python print_cases.py --file test_counties.csv --county_column 1 --county 'Boulder' --cases_column 4 --print_running_avg 1
 assert_exit_code 0
-assert_in_stdout '1
-7
-7
-8
-8
-11
-24
-30
-37
-39
-49
-51
-66
-76
-84
-90
-100
-107
-114
-132
+assert_in_stdout "['1']
+['7']
+['7']
+['8']
+['8']
+['11']
+['24']
+['30']
+['37']
+['39']
+['49']
+['51']
+['66']
+['76']
+['84']
+['90']
+['100']
+['107']
+['114']
+['132']
 1.6
 2.0
 3.4
@@ -128,31 +123,31 @@ assert_in_stdout '1
 8.2
 7.6
 9.6
-5'
+5"
 
 # Test running_avg with window in range
 run test_window_in_range python print_cases.py --file test_counties.csv --county_column 1 --county 'Boulder' --cases_column 4 --print_running_avg 1 --window_size 10
 assert_exit_code 0
-assert_in_stdout '1
-7
-7
-8
-8
-11
-24
-30
-37
-39
-49
-51
-66
-76
-84
-90
-100
-107
-114
-132
+assert_in_stdout "['1']
+['7']
+['7']
+['8']
+['8']
+['11']
+['24']
+['30']
+['37']
+['39']
+['49']
+['51']
+['66']
+['76']
+['84']
+['90']
+['100']
+['107']
+['114']
+['132']
 3.9
 4.8
 4.4
@@ -164,57 +159,57 @@ assert_in_stdout '1
 7.7
 7.7
 9.3
-10'
+10"
 
 # Test running_avg with window out of range
 run test_window_out_of_range python print_cases.py --file test_counties.csv --county_column 1 --county 'Boulder' --cases_column 4 --print_running_avg 1 --window_size 25
 assert_exit_code 0
-assert_in_stdout '1
-7
-7
-8
-8
-11
-24
-30
-37
-39
-49
-51
-66
-76
-84
-90
-100
-107
-114
-132
+assert_in_stdout "['1']
+['7']
+['7']
+['8']
+['8']
+['11']
+['24']
+['30']
+['37']
+['39']
+['49']
+['51']
+['66']
+['76']
+['84']
+['90']
+['100']
+['107']
+['114']
+['132']
 6.6
-20'
+20"
 
 # Test negative window size
 run test_negative_window python print_cases.py --file test_counties.csv --county_column 1 --county 'Boulder' --cases_column 4 --print_running_avg 1 --window_size -5
 assert_exit_code 0
-assert_in_stdout '1
-7
-7
-8
-8
-11
-24
-30
-37
-39
-49
-51
-66
-76
-84
-90
-100
-107
-114
-132
+assert_in_stdout "['1']
+['7']
+['7']
+['8']
+['8']
+['11']
+['24']
+['30']
+['37']
+['39']
+['49']
+['51']
+['66']
+['76']
+['84']
+['90']
+['100']
+['107']
+['114']
+['132']
 1.6
 2.0
 3.4
@@ -231,31 +226,31 @@ assert_in_stdout '1
 8.2
 7.6
 9.6
-5'
+5"
 
 # Test missing file dates
 run test_negative_window python print_cases.py --file skipped_days.csv --county_column 1 --county 'Boulder' --cases_column 4
 assert_exit_code 0
-assert_in_stdout '1
-7
-7
-8
-8
-11
-24
-30
-37
-39
-49
-51
-66
-76
-84
-90
-100
-107
-114
-132'
+assert_in_stdout "['1']
+['7']
+['7']
+['8']
+['8']
+['11']
+['24']
+['30']
+['37']
+['39']
+['49']
+['51']
+['66']
+['76']
+['84']
+['90']
+['100']
+['107']
+['114']
+['132']"
 
 # Test value error raised by out of order dates
 run test_negative_window python print_cases.py --file out_of_order.csv --county_column 1 --county 'Boulder' --cases_column 4

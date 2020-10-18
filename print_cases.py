@@ -8,8 +8,8 @@ import argparse
 import sys
 
 
-def print_cases(file_name, county_column, county, cases_column):
-    """Calls get_column() function to return cases for a county.
+def print_cases(file_name, county_column, county, cases_columns):
+    """Calls get_columns() function to return cases for a county.
 
     Parameters
     ----------
@@ -19,15 +19,15 @@ def print_cases(file_name, county_column, county, cases_column):
             The column containing the county strings
     county: string
             The name of the county
-    cases_column: integer
-            The column containing the case data
+    cases_columns: list of lists
+            Containing the resulting columns
 
     Returns:
     --------
     cases: array of integers
             An array containing all cases for the input county
     """
-    cases = mu.get_column(file_name, county_column, county, cases_column)
+    cases = mu.get_columns(file_name, county_column, county, cases_columns)
     return cases
 
 
@@ -51,8 +51,9 @@ def main():
                         type=str,
                         required=True,
                         help='Enter the county string')
-    parser.add_argument('--cases_column',
-                        dest='cases_column',
+    parser.add_argument('--cases_columns',
+                        dest='cases_columns',
+                        nargs='+',
                         type=int,
                         required=True,
                         help='Enter the cases column to be returned')
@@ -79,7 +80,7 @@ def main():
         county_cases = print_cases(args.file_name,
                                    args.county_column,
                                    args.county,
-                                   args.cases_column)
+                                   args.cases_columns)
     except ValueError:
         print('File contains dates that are not sequential')
         sys.exit(6)
