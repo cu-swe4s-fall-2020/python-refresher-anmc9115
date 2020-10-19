@@ -51,9 +51,9 @@ def get_columns(file_name, query_column, query_value, results_columns):
         try:
             date = columns[0]
             curr_date = datetime.strptime(date, '%Y-%m-%d')
-        except:
+        except ValueError:
             date_first = False
-            
+
         # checking that query col value exists
         if query_column > len(columns):
             print("You entered query column "
