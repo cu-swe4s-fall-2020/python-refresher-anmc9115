@@ -1,7 +1,7 @@
 """Utilties for reading files
 
-    * get_columns - parses a CSV and returns a column
-    * get_daily_count - takes a column, returns change each index
+    * get_columns - parses a CSV and returns entered columns
+    * get_daily_count - takes a list, returns change each index
     * running_average - returns running avgs over a window throughout list
 """
 from array import array
@@ -47,8 +47,12 @@ def get_columns(file_name, query_column, query_value, results_columns):
     last_date = None
     for line in file:
         columns = line.rstrip().split(',')
-        date = columns[0]
-        curr_date = datetime.strptime(date, '%Y-%m-%d')
+        date_first = True
+        try:
+            date = columns[0]
+            curr_date = datetime.strptime(date, '%Y-%m-%d')
+        except ValueError:
+            date_first = False
 
         # checking that query col value exists
         if query_column > len(columns):
@@ -71,13 +75,14 @@ def get_columns(file_name, query_column, query_value, results_columns):
                 sys.exit(4)
 
         # filling cases between skipped dates
-        if last_date is not None:
-            delta = curr_date - last_date
-            if delta.days > 1:
-                for i in range(delta.days - 1):
-                    results.append(results[-1])
-            if delta.days < 1:
-                raise ValueError
+        if date_first:
+            if last_date is not None:
+                delta = curr_date - last_date
+                if delta.days > 1:
+                    for i in range(delta.days - 1):
+                        results.append(results[-1])
+                if delta.days < 1:
+                    raise ValueError
 
         # adding result col to list that matches query
         if query_value == columns[query_column]:
@@ -86,7 +91,8 @@ def get_columns(file_name, query_column, query_value, results_columns):
                 for result_column in results_columns:
                     result.append(columns[result_column])
                 results.append(result)
-        last_date = curr_date
+        if date_first:
+            last_date = curr_date
 
     file.close()
 
