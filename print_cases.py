@@ -23,7 +23,7 @@ def print_cases(file_name, county_column, county, cases_columns):
     cases_columns: list of lists
             Containing the resulting columns
 
-    Returns:
+    Prints
     --------
     cases: array of integers
             An array containing all cases for the input county
@@ -31,6 +31,12 @@ def print_cases(file_name, county_column, county, cases_columns):
     cases = mu.get_columns(file_name, county_column, county, cases_columns)
     return cases
 
+# def print_daily_cases()
+# def print_running_avg()
+# def print_percap_plot
+# EG: in main: 
+# if print_percap_plot:
+#     print_percap_plot()
 
 def main():
     # Parses through file and uses command line for input arguments
@@ -117,7 +123,7 @@ def main():
                                     county_column,
                                     args.county,
                                     dates_cases_columns)
-       
+
         # Get population of the county
         state_column = 5
         state = 'Colorado'
@@ -125,11 +131,9 @@ def main():
                                        state_column,
                                        state,
                                        [6,7])
-        # THIS NOT WORKING, FIX!
-        #county_pop = mu.binary_search('Boulder County', counties_pops)
-        # HARD CODE, TEMPORARY FIX:
-        county_pop = 294567
-        
+
+        county_pop = mu.binary_search('Boulder County', counties_pops)
+
         # Calculate Per Capita Rates
         date_percap = mu.calc_per_capita(date_cases, county_pop) 
         plot_points = []
@@ -139,9 +143,8 @@ def main():
             plot_points.append([date, (date_percap[i])[1]])
         
         # Plot
-        mu.plot_lines(date_percap, ['Dates', 'Per-Capita Cases'], 'percap_cases_boulder.png')
+        mu.plot_lines(plot_points, ['Dates', 'Per-Capita Cases'], 'percap_cases_boulder.png')
         
 
 if __name__ == '__main__':
     main()
-

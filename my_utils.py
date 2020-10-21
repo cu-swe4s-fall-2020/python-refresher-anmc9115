@@ -8,6 +8,9 @@ from array import array
 import sys
 from datetime import datetime
 from operator import itemgetter
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pylab as plt
 
 
 def get_columns(file_name, query_column, query_value, results_columns):
@@ -25,7 +28,7 @@ def get_columns(file_name, query_column, query_value, results_columns):
     results_columns: list of ints
             The columns containing values to be collected
 
-    Returns:
+    Returns
     --------
     results_array: integers array
            values collected from results_columns based on query inputs
@@ -108,7 +111,7 @@ def get_daily_count(results):
     results: int list
             a list of cumulative values
 
-    Returns:
+    Returns
     --------
     daily_count: int array
             values of specified column adjusted to daily
@@ -143,7 +146,7 @@ def running_average(daily_count, window_size=5):
     window_size: int
             Size of the window (range)
 
-    Returns:
+    Returns
     --------
     running_averages: float list
             List containing the running averages
@@ -177,7 +180,7 @@ def binary_search(county_name, counties_pops):
             List of lists containing county names and population
             in one state
 
-    Returns:
+    Returns
     --------
     county_pop: integer
         Population of the county
@@ -191,16 +194,18 @@ def binary_search(county_name, counties_pops):
     high = len(counties_pops)
     while (high - low > 1):
         mid = (high + low) // 2
-        curr_county = counties_pops[mid]
-        if county_name == curr_county[0]:
-            county_pop = curr_county[1]
-            return county_pop
-        if(county_name[0] < curr_county[0]):
+        curr_counties_pops = counties_pops[mid]
+        curr_county_name = curr_counties_pops[0]
+        curr_county_pop = curr_counties_pops[1]
+        if county_name == curr_county_name:
+            county_pop = curr_county_pop
+            return int(county_pop)
+        if county_name < curr_county_name:
             high = mid
         else:
             low = mid
 
-    # if not found
+    # If not found
     print('Could not find county name')
     return -1
 
@@ -215,7 +220,7 @@ def calc_per_capita(date_cases, county_pop):
     county_pop: int
             Population of a county
 
-    Returns:
+    Returns
     --------
     date_percap_cases: list
         List containg lists of date, per-capita cases
@@ -230,3 +235,35 @@ def calc_per_capita(date_cases, county_pop):
         date_percap_cases.append(date_percap_case)
 
     return date_percap_cases
+
+
+def plot_lines(points, labels, file_name):
+    """Take a list of list of points and plot each list as a line.
+        Parameters
+        ----------
+        points    : list of list of points
+                    Each sublist corresponds to the points for one element.
+                    Each point has two values, the first will be the X value
+                    and the second the Y value
+        labels    : list of strings
+                    Each element in lables corresponds to the sublist at the
+                    same poisiting in data
+        file_name : string
+                    Name of the output file
+    """
+    fig = plt.figure(figsize=(10,3), dpi=300)
+    ax = fig.add_subplot(1,1,1)
+
+    i = 0
+    X = []
+    Y = []
+    for pairs in points:
+        X.append(pairs[0])
+        Y.append(pairs[1])
+
+        ax.plot(X, Y, lw=0.5)
+#         ax.text(X[-1], Y[-1], labels[i], size=5)
+
+        i += 1
+
+    plt.savefig(file_name, bbox_inches='tight')
