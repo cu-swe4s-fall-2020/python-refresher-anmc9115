@@ -7,6 +7,7 @@
 from array import array
 import sys
 from datetime import datetime
+from operator import itemgetter
 
 
 def get_columns(file_name, query_column, query_value, results_columns):
@@ -163,3 +164,69 @@ def running_average(daily_count, window_size=5):
         running_avgs.append(current_avg)
 
     return (running_avgs, window_size)
+
+
+def binary_search(county_name, counties_pops):
+    """Does a binary search for key in the list
+
+    Parameters
+    ----------
+    county_name: string
+            The string to be searched for
+    counties_pops: list
+            List of lists containing county names and population
+            in one state
+
+    Returns:
+    --------
+    county_pop: integer
+        Population of the county
+    """
+
+    # sorts alphabetically
+    counties_pops.sort(key=itemgetter(0))
+
+    # searches for county name and returns pop
+    low = -1
+    high = len(counties_pops)
+    while (high - low > 1):
+        mid = (high + low) // 2
+        curr_county = counties_pops[mid]
+        if county_name == curr_county[0]:
+            county_pop = curr_county[1]
+            return county_pop
+        if(county_name[0] < curr_county[0]):
+            high = mid
+        else:
+            low = mid
+
+    # if not found
+    print('Could not find county name')
+    return -1
+
+
+def calc_per_capita(date_cases, county_pop):
+    """Calculates per capita values
+
+    Parameters
+    ----------
+    date_cases: list
+            List containg lists of date, cases
+    county_pop: int
+            Population of a county
+
+    Returns:
+    --------
+    date_percap_cases: list
+        List containg lists of date, per-capita cases
+    """
+    date_percap_cases = []
+    date_percap_case = []
+
+    for i in range(len(date_cases)):
+        curr_date, case_count = date_cases[i]
+        curr_percap = (float(case_count)/county_pop)
+        date_percap_case = [curr_date, curr_percap]
+        date_percap_cases.append(date_percap_case)
+
+    return date_percap_cases

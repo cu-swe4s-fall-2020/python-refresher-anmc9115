@@ -154,5 +154,30 @@ class TestRunningAvg(unittest.TestCase):
                           some_strings, window)
 
 
+class TestPerCapita(unittest.TestCase):
+    def test_per_capita(self):
+        date_cases = [['2020-10-10', '0'], ['2020-10-11', '1'],
+                      ['2020-10-12', '5'], ['2020-10-13', '9'],
+                      ['2020-10-14', '13'], ['2020-10-15', '25']]
+        county_test_pop = 8500
+        date_percap_cases = my_utils.calc_per_capita(date_cases,
+                                                     county_test_pop)
+        for i in range(6):
+            curr_test_date_case = date_cases[i]
+            curr_percap_test_case = (int(curr_test_date_case[1])
+                                     / county_test_pop)
+            curr_date_case = date_percap_cases[i]
+            curr_percap_case = curr_date_case[1]
+            self.assertEqual(curr_percap_case, curr_percap_test_case)
+
+
+class TestBinarySearch(unittest.TestCase):
+    def test_binary_search(self):
+        counties_pops = [['Alpha', 50], ['Lambda', 250], ['Charlie', 5],
+                         ['Beta', 77], ['Gamma', 42]]
+        beta_pop = my_utils.binary_search('Beta', counties_pops)
+        self.assertEqual(beta_pop, 77)
+
+
 if __name__ == '__main__':
     unittest.main()
