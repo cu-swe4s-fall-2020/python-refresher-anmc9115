@@ -106,7 +106,7 @@ def main():
 if __name__ == '__main__':
     main()
 
-    
+
 # co_county_cases = get_columns(covid_data, 2, 'Colorado', (0,1,4))
 # co_county_pop = get_columns(cencus_data, 5, 'Colorado', (6,7))
 # for co in co_county_pop:
