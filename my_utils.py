@@ -239,7 +239,7 @@ def calc_per_capita(date_cases, county_pop):
     return date_percap_cases
 
 
-def plot_lines(points, labels, file_name):
+def plot_lines(points, file_name):
     """Take a list of list of points and plot each list as a line.
         Parameters
         ----------
@@ -247,9 +247,6 @@ def plot_lines(points, labels, file_name):
                     Each sublist corresponds to the points for one element.
                     Each point has two values, the first will be the X value
                     and the second the Y value
-        labels    : list of strings
-                    Each element in lables corresponds to the sublist at the
-                    same poisiting in data
         file_name : string
                     Name of the output file
     """
