@@ -6,6 +6,7 @@
 import my_utils as mu
 import argparse
 import sys
+from datetime import datetime
 
 
 def print_cases(file_name, county_column, county, cases_columns):
@@ -22,13 +23,20 @@ def print_cases(file_name, county_column, county, cases_columns):
     cases_columns: list of lists
             Containing the resulting columns
 
-    Returns:
+    Prints
     --------
     cases: array of integers
             An array containing all cases for the input county
     """
     cases = mu.get_columns(file_name, county_column, county, cases_columns)
     return cases
+
+# def print_daily_cases()
+# def print_running_avg()
+# def print_percap_plot
+# EG: in main:
+# if print_percap_plot:
+#     print_percap_plot()
 
 
 def main():
@@ -72,6 +80,11 @@ def main():
                         type=int,
                         required=False,
                         help='Enter window size for avg calculation')
+    parser.add_argument('--print_percap_plot',
+                        dest='print_percap_plot',
+                        type=bool,
+                        required=False,
+                        help='Enter 1 to print per capita plot')
 
     args = parser.parse_args()
 
@@ -102,15 +115,39 @@ def main():
         print(*running_avg, sep='\n')
         print(window)
 
+    # Prints plot of per-capita case data for a county
+    if args.print_percap_plot:
+        # Get dates and cases
+        county_column = 1
+        dates_cases_columns = [0, 4]
+        date_cases = mu.get_columns(args.file_name,
+                                    county_column,
+                                    args.county,
+                                    dates_cases_columns)
+
+        # Get population of the county
+        state_column = 5
+        state = 'Colorado'
+        counties_pops = mu.get_columns('co-est2019-alldata.csv',
+                                       state_column,
+                                       state,
+                                       [6, 7])
+
+        county_pop = mu.binary_search('Boulder County', counties_pops)
+
+        # Calculate Per Capita Rates
+        date_percap = mu.calc_per_capita(date_cases, county_pop)
+        plot_points = []
+        labels = []
+        for i in range(len(date_percap)):
+            curr_date = (date_percap[i])[0]
+            labels.append(str(curr_date))
+            date = datetime.strptime(curr_date, '%Y-%m-%d')
+            plot_points.append([date, (date_percap[i])[1]])
+
+        # Plot
+        mu.plot_lines(plot_points, labels, 'percap_cases_boulder.png')
+
 
 if __name__ == '__main__':
     main()
-
-
-# co_county_cases = get_columns(covid_data, 2, 'Colorado', (0,1,4))
-# co_county_pop = get_columns(cencus_data, 5, 'Colorado', (6,7))
-# for co in co_county_pop:
-#     co[0]  = co[0][:-7]
-#     co[1]  = int(co[1])
-
-# co_county_pop.sort(key=itemgetter(0))
