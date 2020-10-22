@@ -10,7 +10,7 @@ from datetime import datetime
 
 
 def print_cases(file_name, county_column, county, cases_columns):
-    """Calls get_columns() function to return cases for a county.
+    """Calls get_columns() function to return cases for a county
 
     Parameters
     ----------
@@ -23,24 +23,113 @@ def print_cases(file_name, county_column, county, cases_columns):
     cases_columns: list of lists
             Containing the resulting columns
 
-    Prints
+    Prints/Returns
     --------
     cases: array of integers
             An array containing all cases for the input county
     """
-    cases = mu.get_columns(file_name, county_column, county, cases_columns)
+    try:
+        cases = mu.get_columns(file_name, county_column, county, cases_columns)
+        print(*cases, sep='\n')
+    except ValueError:
+        print('File contains dates that are not sequential')
+        sys.exit(6)
     return cases
 
-# def print_daily_cases()
-# def print_running_avg()
-# def print_percap_plot
-# EG: in main:
-# if print_percap_plot:
-#     print_percap_plot()
+
+def print_daily_cases(county_cases):
+    """Calls get_daily_count() function and prints daily counts
+
+    Parameters
+    ----------
+    county_cases: list
+            List of cases in a county
+
+    Prints
+    --------
+    daily_count: list
+            List of daily counts in a county
+
+    """
+    daily_count = mu.get_daily_count(county_cases)
+    print(*daily_count, sep='\n')
+    return
+
+
+def print_running_avg(daily_cases, window_size):
+    """Calls running_average() and prints running avg
+       and window size
+
+    Parameters
+    ----------
+    daily_cases: list
+            List of daily counts in a county
+    window_size: int
+            Size of window to use in calculation
+
+    Prints
+    --------
+    running_avg: list of floats
+            Running averages for daily counts
+    window: int
+            Size of the window used in calculation
+    """
+    try:
+        running_avg, window = mu.running_average(daily_cases,
+                                                 window_size)
+    except TypeError:
+        running_avg, window = mu.running_average(daily_cases)
+    print(*running_avg, sep='\n')
+    print(window)
+
+
+def print_percap_plot(file_name, county):
+    """Calls plot_lines() and outputs png plot
+
+    Parameters
+    ----------
+    file_name: string
+            Name of case data file
+    county: string
+            Name of county
+
+    Outputs
+    --------
+    percap_cases_boulder.png: png file
+            Graph of per capita covid cases in a county
+    """
+    # Get dates and cases
+    county_column = 1
+    dates_cases_columns = [0, 4]
+    date_cases = mu.get_columns(file_name,
+                                county_column,
+                                county,
+                                dates_cases_columns)
+
+    # Get population of the county
+    state_column = 5
+    state = 'Colorado'
+    counties_pops = mu.get_columns('co-est2019-alldata.csv',
+                                   state_column,
+                                   state,
+                                   [6, 7])
+
+    county_pop = mu.binary_search('Boulder County', counties_pops)
+
+    # Calculate Per Capita Rates
+    date_percap = mu.calc_per_capita(date_cases, county_pop)
+    plot_points = []
+    for i in range(len(date_percap)):
+        curr_date = (date_percap[i])[0]
+        date = datetime.strptime(curr_date, '%Y-%m-%d')
+        plot_points.append([date, (date_percap[i])[1]])
+
+    # Plot
+    mu.plot_lines(plot_points, 'percap_cases_boulder.png')
 
 
 def main():
-    # Parses through file and uses command line for input arguments
+    # Parses through file using command line inputs
     parser = argparse.ArgumentParser(
         description='Returns a column from a file')
 
@@ -88,65 +177,22 @@ def main():
 
     args = parser.parse_args()
 
-    # Prints raw cumulative cases in a county
-    try:
-        county_cases = print_cases(args.file_name,
-                                   args.county_column,
-                                   args.county,
-                                   args.cases_columns)
-    except ValueError:
-        print('File contains dates that are not sequential')
-        sys.exit(6)
+    # Print Cases
+    county_cases = print_cases(args.file_name, args.county_column,
+                               args.county, args.cases_columns)
 
-    print(*county_cases, sep='\n')
-
-    # Prints daily cases in a county
-    daily_count = mu.get_daily_count(county_cases)
+    # Print Daily Cases
     if args.print_daily_cases:
-        print(*daily_count, sep='\n')
+        print_daily_cases(county_cases)
 
-    # Prints running avg for a county
+    # Print Running Average
     if args.print_running_avg:
-        try:
-            running_avg, window = mu.running_average(daily_count,
-                                                     args.window_size)
-        except TypeError:
-            running_avg, window = mu.running_average(daily_count)
-        print(*running_avg, sep='\n')
-        print(window)
+        daily_cases = mu.get_daily_count(county_cases)
+        print_running_avg(daily_cases, args.window_size)
 
-    # Prints plot of per-capita case data for a county
+    # Print Percapita Plot
     if args.print_percap_plot:
-        # Get dates and cases
-        county_column = 1
-        dates_cases_columns = [0, 4]
-        date_cases = mu.get_columns(args.file_name,
-                                    county_column,
-                                    args.county,
-                                    dates_cases_columns)
-
-        # Get population of the county
-        state_column = 5
-        state = 'Colorado'
-        counties_pops = mu.get_columns('co-est2019-alldata.csv',
-                                       state_column,
-                                       state,
-                                       [6, 7])
-
-        county_pop = mu.binary_search('Boulder County', counties_pops)
-
-        # Calculate Per Capita Rates
-        date_percap = mu.calc_per_capita(date_cases, county_pop)
-        plot_points = []
-        labels = []
-        for i in range(len(date_percap)):
-            curr_date = (date_percap[i])[0]
-            labels.append(str(curr_date))
-            date = datetime.strptime(curr_date, '%Y-%m-%d')
-            plot_points.append([date, (date_percap[i])[1]])
-
-        # Plot
-        mu.plot_lines(plot_points, labels, 'percap_cases_boulder.png')
+        print_percap_plot(args.file_name, args.county)
 
 
 if __name__ == '__main__':
