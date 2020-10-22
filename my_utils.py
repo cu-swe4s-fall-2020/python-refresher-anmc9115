@@ -4,13 +4,15 @@
     * get_daily_count - takes a list, returns change each index
     * running_average - returns running avgs over a window throughout list
 """
-from array import array
 import sys
+import numpy as np
 from datetime import datetime
 from operator import itemgetter
+from array import array
 import matplotlib
-matplotlib.use('Agg')
 import matplotlib.pylab as plt
+import matplotlib.dates as mdates
+matplotlib.use('Agg')
 
 
 def get_columns(file_name, query_column, query_value, results_columns):
@@ -251,19 +253,24 @@ def plot_lines(points, labels, file_name):
         file_name : string
                     Name of the output file
     """
-    fig = plt.figure(figsize=(10,3), dpi=300)
-    ax = fig.add_subplot(1,1,1)
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1)
 
-    i = 0
-    X = []
-    Y = []
+    dates = []
+    percap = []
     for pairs in points:
-        X.append(pairs[0])
-        Y.append(pairs[1])
+        dates.append(pairs[0])
+        percap.append(pairs[1])
 
-        ax.plot(X, Y, lw=0.5)
-#         ax.text(X[-1], Y[-1], labels[i], size=5)
+    ax.set_xticks(dates)
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
-        i += 1
+    ax.plot_date(dates, percap, ls='-', marker=None)
+    ax.set_title('COVID-19 Cases Per Capita in Boulder, CO')
+    ax.set_ylabel('Cases per Capita')
+
+    # X-axis date labeling
+    fig.autofmt_xdate(rotation=90)
+    fig.tight_layout()
 
     plt.savefig(file_name, bbox_inches='tight')

@@ -34,9 +34,10 @@ def print_cases(file_name, county_column, county, cases_columns):
 # def print_daily_cases()
 # def print_running_avg()
 # def print_percap_plot
-# EG: in main: 
+# EG: in main:
 # if print_percap_plot:
 #     print_percap_plot()
+
 
 def main():
     # Parses through file and uses command line for input arguments
@@ -113,12 +114,12 @@ def main():
             running_avg, window = mu.running_average(daily_count)
         print(*running_avg, sep='\n')
         print(window)
-        
+
     # Prints plot of per-capita case data for a county
     if args.print_percap_plot:
         # Get dates and cases
         county_column = 1
-        dates_cases_columns = [0,4]
+        dates_cases_columns = [0, 4]
         date_cases = mu.get_columns(args.file_name,
                                     county_column,
                                     args.county,
@@ -130,21 +131,23 @@ def main():
         counties_pops = mu.get_columns('co-est2019-alldata.csv',
                                        state_column,
                                        state,
-                                       [6,7])
+                                       [6, 7])
 
         county_pop = mu.binary_search('Boulder County', counties_pops)
 
         # Calculate Per Capita Rates
-        date_percap = mu.calc_per_capita(date_cases, county_pop) 
+        date_percap = mu.calc_per_capita(date_cases, county_pop)
         plot_points = []
+        labels = []
         for i in range(len(date_percap)):
             curr_date = (date_percap[i])[0]
+            labels.append(str(curr_date))
             date = datetime.strptime(curr_date, '%Y-%m-%d')
             plot_points.append([date, (date_percap[i])[1]])
-        
+
         # Plot
-        mu.plot_lines(plot_points, ['Dates', 'Per-Capita Cases'], 'percap_cases_boulder.png')
-        
+        mu.plot_lines(plot_points, labels, 'percap_cases_boulder.png')
+
 
 if __name__ == '__main__':
     main()
