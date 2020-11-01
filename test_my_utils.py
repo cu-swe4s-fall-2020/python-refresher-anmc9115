@@ -4,6 +4,7 @@ import my_utils
 import unittest
 import random
 import statistics
+import string
 import numpy as np
 from array import array
 
@@ -172,11 +173,31 @@ class TestPerCapita(unittest.TestCase):
 
 
 class TestBinarySearch(unittest.TestCase):
-    def test_binary_search(self):
+    def test_binary_search_simple(self):
         counties_pops = [['Alpha', 50], ['Lambda', 250], ['Charlie', 5],
                          ['Beta', 77], ['Gamma', 42]]
         beta_pop = my_utils.binary_search('Beta', counties_pops)
         self.assertEqual(beta_pop, 77)
+
+    def test_binary_search_random(self):
+        key_idx = random.randint(1, 100)
+        list_size = key_idx + random.randint(1, 100)
+        my_list = [] * list_size
+        key_pop = 101
+        nonkey_pop = 100
+
+        # makes list of random int, pop
+        for i in range(list_size):
+            if i == key_idx:
+                my_list.append(['key', key_pop])
+            else:
+                # fill with random string
+                letters = string.ascii_lowercase
+                result_str = ''.join(random.choice(letters) for i in range(3))
+                my_list.append([result_str, nonkey_pop])
+
+        found_pop = my_utils.binary_search('key', my_list)
+        self.assertEqual(found_pop, key_pop)
 
 
 if __name__ == '__main__':

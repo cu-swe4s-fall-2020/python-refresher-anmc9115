@@ -53,7 +53,6 @@ def print_daily_cases(county_cases):
     """
     daily_count = mu.get_daily_count(county_cases)
     print(*daily_count, sep='\n')
-    return
 
 
 def print_running_avg(daily_cases, window_size):
