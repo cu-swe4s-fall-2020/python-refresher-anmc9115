@@ -3,6 +3,9 @@
     * get_columns - parses a CSV and returns entered columns
     * get_daily_count - takes a list, returns change each index
     * running_average - returns running avgs over a window throughout list
+    * binary_search - does binary search for a key in a list
+    * calc_per_capita - calculates per capita for list of dates and pop
+    * plot_lines - plots per capita cases over a range of dates
 """
 import sys
 import numpy as np
@@ -54,6 +57,7 @@ def get_columns(file_name, query_column, query_value, results_columns):
     for line in file:
         columns = line.rstrip().split(',')
         date_first = True
+        # checks if there is date in first line of file
         try:
             date = columns[0]
             curr_date = datetime.strptime(date, '%Y-%m-%d')
@@ -88,6 +92,7 @@ def get_columns(file_name, query_column, query_value, results_columns):
                     for i in range(delta.days - 1):
                         results.append(results[-1])
                 if delta.days < 1:
+                    file.close()
                     raise ValueError
 
         # adding result col to list that matches query
@@ -129,7 +134,7 @@ def get_daily_count(results):
 
     daily_count = []
 
-    # Fills array with daily count
+    # fills array with daily count
     for i in range(len(flat_results)):
         if i == 0:
             daily_count.append(flat_results[i])
@@ -159,10 +164,12 @@ def running_average(daily_count, window_size=5):
     # if window_size too big, adjusted to size of data
     if window_size > len(daily_count):
         window_size = len(daily_count)
+
     # if window_size negative, restore to default
     if window_size < 0:
         window_size = 5
 
+    # calculates running avg
     for i in range(len(daily_count)-window_size+1):
         current_window = daily_count[i:i + window_size]
         current_avg = sum(current_window) / window_size
@@ -259,14 +266,17 @@ def plot_lines(points, file_name):
         dates.append(pairs[0])
         percap.append(pairs[1])
 
+    # sets the x axis
     ax.set_xticks(dates)
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y-%m-%d'))
 
     ax.plot_date(dates, percap, ls='-', marker=None)
+
+    # axes titles
     ax.set_title('COVID-19 Cases Per Capita in Boulder, CO')
     ax.set_ylabel('Cases per Capita')
 
-    # X-axis date labeling
+    # x-axis date labeling
     fig.autofmt_xdate(rotation=90)
     fig.tight_layout()
 
