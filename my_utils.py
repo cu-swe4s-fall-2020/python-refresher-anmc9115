@@ -85,15 +85,15 @@ def get_columns(file_name, query_column, query_value, results_columns):
                 sys.exit(4)
 
         # filling cases between skipped dates
-        if date_first:
-            if last_date is not None:
-                delta = curr_date - last_date
-                if delta.days > 1:
-                    for i in range(delta.days - 1):
-                        results.append(results[-1])
-                if delta.days < 1:
-                    file.close()
-                    raise ValueError
+#         if date_first:
+#             if last_date is not None:
+#                 delta = curr_date - last_date
+#                 if delta.days > 1:
+#                     for i in range(delta.days - 1):
+#                         results.append(results[-1])
+#                 if delta.days < 1:
+#                     file.close()
+#                     raise ValueError
 
         # adding result col to list that matches query
         if query_value == columns[query_column]:
