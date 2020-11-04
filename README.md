@@ -57,3 +57,13 @@ git clone https://github.com/cu-swe4s-fall-2020/python-refresher-anmc9115.git
    * ADD: `plot_lines()` which plots per capita values for each data in a county
    * CHANGE: `print_cases.py` updated for the new functions, and reorganzied 
    * CHANGE: functional and unit tests updated
+* v5.1
+   * ADD: additional comments in `my_utils`
+   * ADD: randomized unit test for `binary_search`
+   * CHANGE: making functions in print_cases more consistent
+   * ADD: add `file.close()` in `my_utils` when `ValueError` is raised
+* v6.0
+   * ADD: `hash_table.py` containing `ascii_hash_function`, `put`, and `get`
+   * ADD: `get_daily_rates.py` which uses hash tables to print daily rates for
+     counties in a certain state
+   * CHANGE: functional and unit tests updated
