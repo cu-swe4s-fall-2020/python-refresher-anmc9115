@@ -1,6 +1,7 @@
 ''' Hash table implementation
 
-    * hash_function - takes a string and table size and returns hash value
+    * ascii_hash_function - takes a string and table size and 
+      returns hash value
     * put - add a value to the table by hash_string
     * get - get a value from the table by hash_string
 '''
