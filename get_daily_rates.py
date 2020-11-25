@@ -5,7 +5,7 @@ import argparse
 from datetime import datetime
 
 
-def get_daily_rates(state, date):
+def get_daily_rates(state, date, output_filename):
     """Prints daily case rate per capita for a given date
 
     Parameters
@@ -60,6 +60,10 @@ def get_daily_rates(state, date):
     for c_date, c_county, c_case in date_c_cases:
         if c_date == date:
             c_cases.append([c_date, c_county, c_case])
+    
+    # Write to txt file
+    output_txt = output_filename + '_rates.txt'
+    f = open(output_txt, 'w+')
 
     # print county name and percap case rate
     county_names = []
@@ -72,6 +76,10 @@ def get_daily_rates(state, date):
         case_rates.append(case_rate)
 
         print(county_name, case_rate)
+        to_txt = str(case_rate) + '\n'
+        f.write(to_txt)
+    
+    f.close()
 
     return county_names, case_rates
 
@@ -91,11 +99,15 @@ def main():
                         type=str,
                         required=True,
                         help='Enter date as year-month-day')
-
+    parser.add_argument('--output_filename',
+                        dest='output_filename',
+                        type=str,
+                        required=True,
+                        help='Name of the output files (w/out type)')
     args = parser.parse_args()
 
     # get daily rates
-    get_daily_rates(args.state, args.date)
+    get_daily_rates(args.state, args.date, args.output_filename)
 
 
 if __name__ == '__main__':
