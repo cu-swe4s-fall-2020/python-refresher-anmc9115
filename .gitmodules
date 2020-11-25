@@ -1,3 +1,6 @@
 [submodule "ss_plots"]
 	path = ss_plots
 	url = https://github.com/swe4s/ss_plots.git
+[submodule "covid-19-data"]
+	path = covid-19-data
+	url = https://github.com/nytimes/covid-19-data.git
