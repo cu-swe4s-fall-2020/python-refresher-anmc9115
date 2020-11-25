@@ -2,7 +2,7 @@ test -e ssshtest || wget -q https://raw.githubusercontent.com/ryanlayer/ssshtest
 . ssshtest
 
 # Test correct input
-run test_get_daily_rates_CO python get_daily_rates.py --state Colorado --date 2020-07-23
+run test_get_daily_rates_CO python get_daily_rates.py --state Colorado --date 2020-07-23 --output_filename test_output
 assert_exit_code 0
 assert_in_stdout "Adams 0.012028903789149984
 Alamosa 0.013985108449336354
@@ -69,7 +69,7 @@ Weld 0.013230495401957877
 Yuma 0.005576023100667131"
 
 # Test other correct input
-run test_get_daily_rates_WA python get_daily_rates.py --state Washington --date 2020-07-23
+run test_get_daily_rates_WA python get_daily_rates.py --state Washington --date 2020-07-23 --output_filename test_output
 assert_exit_code 0
 assert_in_stdout "Adams 0.01719350704826997
 Asotin 0.00101743513850992
@@ -112,5 +112,5 @@ Whitman 0.0016526710737895301
 Yakima 0.040517039357647666"
 
 # test for error raised when county name is wrong
-run test_typo_county python get_daily_rates.py --state Colorado --date 2020-07-23
+run test_typo_county python get_daily_rates.py --state Colorado --date 2020-07-23 --output_filename test_output
 assert_exit_code 0
