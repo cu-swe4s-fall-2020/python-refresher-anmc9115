@@ -2,14 +2,14 @@
 > This project will plot cases per capita in a county
 
 The file print_cases takes command line arguments for a csv file containing COVID data 
-recieved from https://github.com/nytimes/covid-19-data.git, as well as the county column, 
+referenced in the submodule as part of this repository, as well as the county column, 
 county of interest, and the cases column. The print_cases function calls upon get_columns 
 in my_utils.py in order to collect and store data from specified columns per the specified 
 county in a list, or list of lists when multiple result columns are given. There are options 
 to print the daily cases, rather than cumulative cases, as well as the running average over 
 a given window. Files which contain skipped days will be filled in, and those which contain 
 out-of order dates will raise an error. Per capita cases can be plotted for each date in
-a particular county using the plot_lines function. 
+a particular county using the plot_lines function. Plotting functionality is also included. 
 
 ## Installation
 
@@ -22,6 +22,17 @@ git clone https://github.com/cu-swe4s-fall-2020/python-refresher-anmc9115.git
 ## Usage example
 `test_print_cases.sh` contains test arguments that are formatted for command line inputs
 `run.sh` runs `test_print_cases.sh` and may be run itself with the command: bash run.sh
+
+## Plotting Functionality
+### Per Capita Case Distribution Histogram
+This histogram can be used to visualize the distribution of case rates per capita 
+in all counties of a given state on a certain date.
+<center><img src="CO_counties_histogram.png" width="300"/></center>
+
+### Deaths vs Population in Counties
+This scatter plot can be used to visualize the correlation between county size and 
+number of deaths from covid-19 in the counties of a given state
+<center><img src="CO_countiesdp.png" width="300"/></center>
 
 ## Release History
 
@@ -67,3 +78,8 @@ git clone https://github.com/cu-swe4s-fall-2020/python-refresher-anmc9115.git
    * ADD: `get_daily_rates.py` which uses hash tables to print daily rates for
      counties in a certain state
    * CHANGE: functional and unit tests updated
+* v7.0
+   * ADD: `Snakefile` used for `snakemake` workflow functionality
+   * CHANGE: update `get_daily_rates.py` to prepare txt files for plotting
+   * ADD: Plotting functionality for daily rate distribution in counties in a state
+   * ADD: Plotting functionality for deaths vs population scatter plot in counties 
